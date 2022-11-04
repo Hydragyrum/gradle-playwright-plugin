@@ -6,11 +6,5 @@
  * Detailed information about configuring a multi-project build in Gradle can be found
  * in the user manual at https://docs.gradle.org/7.5.1/userguide/multi_project_builds.html
  */
-pluginManagement {
-    includeBuild("./plugin")
-}
 
-
-rootProject.name = "gradle-playwright-plugin"
-//include("plugin")
-include("test-project")
+rootProject.name = "gradle-playwright"

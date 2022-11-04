@@ -8,15 +8,32 @@ import kotlin.test.Test
 import kotlin.test.assertNotNull
 
 /**
- * A simple unit test for the 'net.hydrashead.playwright.greeting' plugin.
+ * A simple unit test for the 'net.hydrashead.gradle-playwright' plugin.
  */
 class PlaywrightPluginTest {
-    @Test fun `plugin registers task`() {
+    @Test fun `plugin registers codegen task`() {
         // Create a test project and apply the plugin
         val project = ProjectBuilder.builder().build()
-        project.plugins.apply("net.hydrashead.playwright.greeting")
+        project.plugins.apply("java")
+        project.plugins.apply("net.hydrashead.gradle-playwright")
+        project.extensions.configure<PlaywrightPluginExtension>("playwright") {
+            it.codeGenUrl.set("https://playwright.dev")
+        }
 
         // Verify the result
-        assertNotNull(project.tasks.findByName("greeting"))
+        assertNotNull(project.tasks.findByName("codegen"))
+    }
+
+    @Test fun `plugin registers test task`() {
+        // Create a test project and apply the plugin
+        val project = ProjectBuilder.builder().build()
+        project.plugins.apply("java")
+        project.plugins.apply("net.hydrashead.gradle-playwright")
+        project.extensions.configure<PlaywrightPluginExtension>("playwright") {
+            it.codeGenUrl.set("https://playwright.dev")
+        }
+
+        // Verify the result
+        assertNotNull(project.tasks.findByName("playwrightTest"))
     }
 }

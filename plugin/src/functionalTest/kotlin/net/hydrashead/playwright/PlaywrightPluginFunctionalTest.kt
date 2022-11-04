@@ -44,9 +44,9 @@ playwright {
         runner.withPluginClasspath()
         runner.withArguments("codegen")
         runner.withProjectDir(getProjectDir())
-        val result = runner.build();
+        val result = runner.build()
 
         // Verify the result
-        assertTrue(result.output.contains("Hello from plugin 'net.hydrashead.playwright'"))
+        assertTrue(result.output.contains("Hello from plugin 'net.hydrashead.gradle-playwright'"))
     }
 }

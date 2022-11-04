@@ -9,23 +9,28 @@ import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
+import org.gradle.api.tasks.testing.Test
 
 private const val PLAYWRIGHT_TOOL_VERSION_CONVENTION = "1.27.0"
+private const val PLAYWRIGHT_CODEGEN_URL_CONVENTION = "https://playwright.dev"
 
 /**
  * A simple 'hello world' plugin.
  */
-class PlaywrightPlugin: Plugin<Project> {
+class PlaywrightPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val extension = project.extensions.create("playwright", PlaywrightPluginExtension::class.java)
         extension.toolVersion.convention(PLAYWRIGHT_TOOL_VERSION_CONVENTION)
+        extension.codeGenUrl.convention(PLAYWRIGHT_CODEGEN_URL_CONVENTION)
+
+        project.plugins.apply("java")
+
         val sourceSets = project.extensions.getByType(SourceSetContainer::class.java)
         val testSourceSet = sourceSets.named(SourceSet.TEST_SOURCE_SET_NAME)
-
-
-        val playwrightSourceSet = sourceSets.register("playwright") {
+        val playwrightSourceSet = sourceSets.create("playwright") {
             it.compileClasspath += testSourceSet.get().output
             it.runtimeClasspath += testSourceSet.get().output
+            it.java.srcDir("playwright")
         }
 
         project.configurations.named("playwrightImplementation") {
@@ -36,14 +41,25 @@ class PlaywrightPlugin: Plugin<Project> {
             it.extendsFrom(project.configurations.named(JavaPlugin.TEST_RUNTIME_ONLY_CONFIGURATION_NAME).get())
         }
 
-        project.dependencies.add("playwrightImplementation", "com.microsoft.playwright:playwright:${extension.toolVersion.get()}")
+        project.dependencies.add(
+            "playwrightImplementation",
+            "com.microsoft.playwright:playwright:${extension.toolVersion.get()}"
+        )
+
         // Register a task
         project.tasks.register("codegen", JavaExec::class.java) {
             it.group = "playwright"
-            it.classpath = playwrightSourceSet.get().runtimeClasspath
+            it.classpath = playwrightSourceSet.runtimeClasspath
             it.mainClass.set("com.microsoft.playwright.CLI")
-            it.args = listOf("codegen", extension.url.get())
+            it.args = listOf("codegen", extension.codeGenUrl.get())
             it.dependsOn("testClasses")
+        }
+
+        project.tasks.register("playwrightTest", Test::class.java) {
+            it.group = "playwright"
+            it.testClassesDirs = playwrightSourceSet.output.classesDirs
+            it.classpath = playwrightSourceSet.runtimeClasspath
+            it.useJUnitPlatform()
         }
     }
 }

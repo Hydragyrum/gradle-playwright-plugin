@@ -14,6 +14,9 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.6.21"
 }
 
+group = "net.hydrashead"
+version = "0.0.1-SNAPSHOT"
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
