@@ -16,9 +16,6 @@ class PlaywrightPluginTest {
         val project = ProjectBuilder.builder().build()
         project.plugins.apply("java")
         project.plugins.apply("net.hydrashead.gradle-playwright")
-        project.extensions.configure<PlaywrightPluginExtension>("playwright") {
-            it.codeGenUrl.set("https://playwright.dev")
-        }
 
         // Verify the result
         assertNotNull(project.tasks.findByName("codegen"))
@@ -29,9 +26,6 @@ class PlaywrightPluginTest {
         val project = ProjectBuilder.builder().build()
         project.plugins.apply("java")
         project.plugins.apply("net.hydrashead.gradle-playwright")
-        project.extensions.configure<PlaywrightPluginExtension>("playwright") {
-            it.codeGenUrl.set("https://playwright.dev")
-        }
 
         // Verify the result
         assertNotNull(project.tasks.findByName("playwrightTest"))

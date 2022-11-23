@@ -12,7 +12,6 @@ import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.testing.Test
 
 private const val PLAYWRIGHT_TOOL_VERSION_CONVENTION = "1.27.0"
-private const val PLAYWRIGHT_CODEGEN_URL_CONVENTION = "https://playwright.dev"
 
 /**
  * A simple 'hello world' plugin.
@@ -21,7 +20,6 @@ class PlaywrightPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val extension = project.extensions.create("playwright", PlaywrightPluginExtension::class.java)
         extension.toolVersion.convention(PLAYWRIGHT_TOOL_VERSION_CONVENTION)
-        extension.codeGenUrl.convention(PLAYWRIGHT_CODEGEN_URL_CONVENTION)
 
         project.plugins.apply("java")
 
@@ -47,11 +45,8 @@ class PlaywrightPlugin : Plugin<Project> {
         )
 
         // Register a task
-        project.tasks.register("codegen", JavaExec::class.java) {
+        project.tasks.register("codegen", PlaywrightCodegenTask::class.java) {
             it.group = "playwright"
-            it.classpath = playwrightSourceSet.runtimeClasspath
-            it.mainClass.set("com.microsoft.playwright.CLI")
-            it.args = listOf("codegen", extension.codeGenUrl.get())
             it.dependsOn("testClasses")
         }
 

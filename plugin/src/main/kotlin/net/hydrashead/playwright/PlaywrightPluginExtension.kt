@@ -4,6 +4,4 @@ import org.gradle.api.provider.Property
 
 interface PlaywrightPluginExtension {
     val toolVersion: Property<String>
-
-    val codeGenUrl: Property<String>
 }

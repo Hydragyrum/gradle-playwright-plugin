@@ -33,16 +33,13 @@ repositories {
     mavenCentral()
 }
 
-playwright {
-    url = "playwright.dev"
-}
 """)
 
         // Run the build
         val runner = GradleRunner.create()
         runner.forwardOutput()
         runner.withPluginClasspath()
-        runner.withArguments("codegen")
+        runner.withArguments("codegen", "--url=https://example.com")
         runner.withProjectDir(getProjectDir())
         val result = runner.build()
 
