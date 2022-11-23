@@ -17,7 +17,7 @@ plugins {
 }
 
 group = "net.hydrashead"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.1"
 
 repositories {
     // Use Maven Central for resolving dependencies.
