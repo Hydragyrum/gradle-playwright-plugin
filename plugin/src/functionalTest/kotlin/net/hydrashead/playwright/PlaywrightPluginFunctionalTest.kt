@@ -4,9 +4,11 @@
 package net.hydrashead.playwright
 
 import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.TaskOutcome
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 /**
@@ -24,7 +26,6 @@ class PlaywrightPluginFunctionalTest {
         getSettingsFile().writeText("")
         getBuildFile().writeText("""
 plugins {
-    id('java')
     id('net.hydrashead.gradle-playwright')
 }
 
@@ -44,6 +45,6 @@ repositories {
         val result = runner.build()
 
         // Verify the result
-        assertTrue(result.output.contains("Hello from plugin 'net.hydrashead.gradle-playwright'"))
+        assertEquals(result.task(":codegen")?.outcome, TaskOutcome.SUCCESS)
     }
 }
