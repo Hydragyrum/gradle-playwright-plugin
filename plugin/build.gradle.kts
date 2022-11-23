@@ -9,9 +9,11 @@
 plugins {
     // Apply the Java Gradle plugin development plugin to add support for developing Gradle plugins
     `java-gradle-plugin`
+    `maven-publish`
 
     // Apply the Kotlin JVM plugin to add support for Kotlin.
     id("org.jetbrains.kotlin.jvm") version "1.6.21"
+    id("com.gradle.plugin-publish") version "1.1.0"
 }
 
 group = "net.hydrashead"
@@ -41,6 +43,8 @@ gradlePlugin {
     val playwright by plugins.creating {
         id = "net.hydrashead.gradle-playwright"
         implementationClass = "net.hydrashead.playwright.PlaywrightPlugin"
+        displayName = "Gradle Playwright Plugin"
+        description = "A simple plugin to bootstrap playwright in a JVM project"
     }
 }
 
@@ -61,4 +65,10 @@ gradlePlugin.testSourceSets(functionalTestSourceSet)
 tasks.named<Task>("check") {
     // Run the functional tests as part of `check`
     dependsOn(functionalTest)
+}
+
+pluginBundle {
+    website = "https://github.com/Hydragyrum/gradle-playwright-plugin"
+    vcsUrl = "https://github.com/Hydragyrum/gradle-playwright-plugin"
+    tags = listOf("test", "e2e", "playwright", "browser", "java", "kotlin", "jvm")
 }
